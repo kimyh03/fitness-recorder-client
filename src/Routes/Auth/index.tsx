@@ -1,3 +1,2 @@
-import React from "react";
-
-export default () => <span>Auth</span>;
+import AuthContainer from "./AuthContainer";
+export default AuthContainer;
