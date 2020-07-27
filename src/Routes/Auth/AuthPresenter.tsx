@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import Button from "src/Components/Button";
 import styled from "styled-components";
 import Input from "../../Components/Input";
@@ -57,64 +58,76 @@ export default ({
   <Container>
     <Box>
       {action === "logIn" && (
-        <Form onSubmit={onSubmit}>
-          <Input
-            type={"email"}
-            value={email.value}
-            placeholder={"이메일"}
-            required={true}
-            onChange={email.onChange}
-          />
-          <Input
-            type={"password"}
-            value={password.value}
-            placeholder={"비밀번호"}
-            required={true}
-            onChange={password.onChange}
-          />
-          <Button text={"로그인"} />
-          <StateChanger>
-            아이디가 없으신가요?{" "}
-            <StateText onClick={() => setAction("signUp")}>회원가입</StateText>
-          </StateChanger>
-        </Form>
+        <>
+          <Helmet>
+            <title>Log In | Fitness recorder</title>
+          </Helmet>
+          <Form onSubmit={onSubmit}>
+            <Input
+              type={"email"}
+              value={email.value}
+              placeholder={"이메일"}
+              required={true}
+              onChange={email.onChange}
+            />
+            <Input
+              type={"password"}
+              value={password.value}
+              placeholder={"비밀번호"}
+              required={true}
+              onChange={password.onChange}
+            />
+            <Button text={"로그인"} />
+            <StateChanger>
+              아이디가 없으신가요?{" "}
+              <StateText onClick={() => setAction("signUp")}>
+                회원가입
+              </StateText>
+            </StateChanger>
+          </Form>
+        </>
       )}
       {action === "signUp" && (
-        <Form onSubmit={onSubmit}>
-          <Input
-            type={"email"}
-            value={email.value}
-            placeholder={"이메일"}
-            required={true}
-            onChange={email.onChange}
-          />
-          <Input
-            type={"password"}
-            value={password.value}
-            placeholder={"비밀번호"}
-            required={true}
-            onChange={password.onChange}
-          />
-          <Input
-            type={"password"}
-            value={confirmPassword.value}
-            placeholder={"비밀번호 확인"}
-            required={true}
-            onChange={confirmPassword.onChange}
-          />
-          <Input
-            type={"text"}
-            value={username.value}
-            placeholder={"이름"}
-            required={true}
-            onChange={username.onChange}
-          />
-          <Button text={"회원가입"} />
-          <StateChanger>
-            이미 아이디가 있으신가요?{" "}
-            <StateText onClick={() => setAction("logIn")}>로그인</StateText>
-          </StateChanger>
-        </Form>
+        <>
+          <Helmet>
+            <title>Sign Up | Fitness recorder</title>
+          </Helmet>
+          <Form onSubmit={onSubmit}>
+            <Input
+              type={"email"}
+              value={email.value}
+              placeholder={"이메일"}
+              required={true}
+              onChange={email.onChange}
+            />
+            <Input
+              type={"password"}
+              value={password.value}
+              placeholder={"비밀번호"}
+              required={true}
+              onChange={password.onChange}
+            />
+            <Input
+              type={"password"}
+              value={confirmPassword.value}
+              placeholder={"비밀번호 확인"}
+              required={true}
+              onChange={confirmPassword.onChange}
+            />
+            <Input
+              type={"text"}
+              value={username.value}
+              placeholder={"이름"}
+              required={true}
+              onChange={username.onChange}
+            />
+            <Button text={"회원가입"} />
+            <StateChanger>
+              이미 아이디가 있으신가요?{" "}
+              <StateText onClick={() => setAction("logIn")}>로그인</StateText>
+            </StateChanger>
+          </Form>
+        </>
       )}
     </Box>
   </Container>
