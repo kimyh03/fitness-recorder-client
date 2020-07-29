@@ -13,7 +13,10 @@ interface IProps {
 }
 
 const Container = styled.div`
-  margin-left: 230px;
+  margin-left: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const AppRouter: React.SFC<IProps> = (props) => (

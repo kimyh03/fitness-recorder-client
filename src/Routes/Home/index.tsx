@@ -1,3 +1,2 @@
-import React from "react";
-
-export default () => <span>Home</span>;
+import HomeContainer from "./HomeContainer";
+export default HomeContainer;
