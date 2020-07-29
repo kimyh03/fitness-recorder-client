@@ -8,5 +8,7 @@ declare module "styled-components" {
     deepBlueColor: string;
     blackColor: string;
     gleenColor: string;
+    boxShadow: string;
+    border: string;
   }
 }

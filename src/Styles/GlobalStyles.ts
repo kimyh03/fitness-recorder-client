@@ -3,6 +3,9 @@ import reset from "styled-reset";
 
 export default createGlobalStyle`
     ${reset};
+    *{
+        box-sizing:border-box;
+    }
     body {
         background-color:#F8F9FC;
         color:${(props) => props.theme.blackColor};
@@ -10,6 +13,7 @@ export default createGlobalStyle`
         width:100%;
         margin: 0;
         margin: auto;
+        height:100fr;
     }
     a {
         color:inherit;
@@ -26,5 +30,8 @@ export default createGlobalStyle`
     }
     button:focus{
         outline:none;
+    }
+    button{
+        border:none;
     }
 `;
