@@ -6,18 +6,18 @@ import { Body, Chart, Gym, Home, RightArrow } from "./Icons";
 const Container = styled.div`
   position: fixed;
   height: 100vh;
-  max-width: 250px;
+  max-width: 200px;
   padding: 0 15px;
   width: 100%;
   display: flex;
   flex-direction: column;
 
-  background: -webkit-linear-gradient(
-    124deg,
-    rgb(116, 177, 243),
-    rgb(0, 113, 255)
+  background: rgb(78, 115, 223);
+  background: linear-gradient(
+    90deg,
+    rgba(34, 78, 208, 1) 0%,
+    rgba(78, 115, 223, 1) 100%
   );
-  background: linear-gradient(124deg, rgb(116, 177, 243), rgb(0, 113, 255));
 `;
 
 const List = styled.ul`
