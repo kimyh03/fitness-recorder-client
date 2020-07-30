@@ -10,5 +10,5 @@ export default () => {
     setValue(newValue);
   };
 
-  return { value, onClick };
+  return { value, onClick, setValue };
 };

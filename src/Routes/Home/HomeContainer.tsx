@@ -1,6 +1,7 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import CreateExercisePopUp from "src/Components/CreateExercisePopUp";
 import Loader from "src/Components/Loader";
 import UseButton from "src/Hooks/UseButton";
@@ -34,10 +35,22 @@ const GET_MY_DATA = gql`
   }
 `;
 
+const CREATE_EXERCISE = gql`
+  mutation createExercise($bodyPart: String!, $title: String!) {
+    createExercise(bodyPart: $bodyPart, title: $title) {
+      ok
+    }
+  }
+`;
+
 export default () => {
   const [action, setAction] = useState("Normal");
   const bodyPart = UseButton();
   const title = UseInput("");
+  const { loading, data, refetch } = useQuery(GET_MY_DATA);
+  const [createExercise] = useMutation(CREATE_EXERCISE, {
+    variables: { bodyPart: bodyPart.value, title: title.value }
+  });
   /*
   const bodyWeight = UseInput("");
   const fat = UseInput("");
@@ -51,9 +64,19 @@ export default () => {
   const set = UseInput("");
   const time = UseInput("");
 */
-  const onSubmit = () => {
+  const onSubmit: React.FormEventHandler = async (event) => {
+    event.preventDefault();
     if (action === "Exercise") {
-      setAction("Normal");
+      try {
+        await createExercise();
+        await refetch();
+        bodyPart.setValue("");
+        title.setValue("");
+        toast.success("나의 운동이 추가 되었습니다!");
+        setAction("Normal");
+      } catch (error) {
+        toast.error(error.message);
+      }
     } else if (action === "Workout") {
       setAction("Normal");
     } else if (action === "Inbody") {
@@ -78,7 +101,6 @@ export default () => {
     };
   };
 
-  const { loading, data } = useQuery(GET_MY_DATA);
   if (loading) return <Loader />;
   else if (!loading && data && data.getMe && data.getMe.user) {
     const {

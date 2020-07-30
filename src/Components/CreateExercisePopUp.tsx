@@ -145,8 +145,8 @@ const CreateExercisePopUp: React.SFC<IProps> = ({
           Arm
         </BodyPart>
       </BodyPartContainer>
-      <Form>
-        <Input></Input>
+      <Form onSubmit={onSubmit}>
+        <Input value={title.value} onChange={title.onChange}></Input>
         <Button>Create!</Button>
       </Form>
     </Container>

@@ -18,6 +18,7 @@ const Container = styled.div`
   box-shadow: ${(props) => props.theme.boxShadow};
   border: ${(props) => props.theme.border};
   border-radius: 10px;
+  overflow: auto;
 `;
 
 const Header = styled.div`
@@ -36,10 +37,9 @@ const Data = styled.div`
 
 const Coulmn = styled.div`
   display: flex;
-
   padding: 20px 0;
+  justify-content: center;
   border-bottom: ${(props) => props.theme.border};
-  justify-content: space-around;
   color: #4e73df;
   opacity: 0.7;
   font-size: 15px;
@@ -49,9 +49,17 @@ const Coulmn = styled.div`
   }
 `;
 
-const TitleCoulmn = styled.div``;
+const TitleCoulmn = styled.div`
+  width: 70%;
+  display: flex;
+  justify-content: center;
+`;
 
-const RecordCoulmn = styled.div``;
+const RecordCoulmn = styled.div`
+  width: 30%;
+  display: flex;
+  justify-content: center;
+`;
 
 const NoData = styled.div`
   width: 100%;
@@ -63,7 +71,6 @@ const NoData = styled.div`
 `;
 
 const ExerciseCard: React.SFC<IProps> = ({ bodyPart, exercises }) => {
-  console.log(exercises);
   if (exercises.length === 0) {
     return (
       <Container>
