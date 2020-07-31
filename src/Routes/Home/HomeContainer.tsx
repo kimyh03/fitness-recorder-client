@@ -3,6 +3,8 @@ import { gql } from "apollo-boost";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import CreateExercisePopUp from "src/Components/CreateExercisePopUp";
+import CreateInbodyPopUp from "src/Components/CreateInbodyPopUp";
+import CreateWorkoutPopUp from "src/Components/CreateWorkoutPopUp";
 import Loader from "src/Components/Loader";
 import UseButton from "src/Hooks/UseButton";
 import UseInput from "src/Hooks/UseInput";
@@ -31,6 +33,13 @@ const GET_MY_DATA = gql`
           latestRecord
         }
       }
+      latestInbodyData {
+        id
+        weight
+        fat
+        muscle
+        bodyFatRate
+      }
     }
   }
 `;
@@ -43,27 +52,51 @@ const CREATE_EXERCISE = gql`
   }
 `;
 
+const CREATE_INBODY = gql`
+  mutation createInbodyData(
+    $weight: String!
+    $fat: String!
+    $muscle: String!
+    $bodyFatRate: String!
+  ) {
+    createInbodyData(
+      weight: $weight
+      fat: $fat
+      muscle: $muscle
+      bodyFatRate: $bodyFatRate
+    ) {
+      ok
+    }
+  }
+`;
+
 export default () => {
   const [action, setAction] = useState("Normal");
   const bodyPart = UseButton();
   const title = UseInput("");
-  const { loading, data, refetch } = useQuery(GET_MY_DATA);
-  const [createExercise] = useMutation(CREATE_EXERCISE, {
-    variables: { bodyPart: bodyPart.value, title: title.value }
-  });
-  /*
   const bodyWeight = UseInput("");
   const fat = UseInput("");
   const muscle = UseInput("");
   const bodyFatRate = UseInput("");
+  const { loading, data, refetch } = useQuery(GET_MY_DATA);
+  const [createExercise] = useMutation(CREATE_EXERCISE, {
+    variables: { bodyPart: bodyPart.value, title: title.value }
+  });
+  const [createInbody] = useMutation(CREATE_INBODY, {
+    variables: {
+      weight: bodyWeight.value,
+      fat: fat.value,
+      muscle: muscle.value,
+      bodyFatRate: bodyFatRate.value
+    }
+  });
 
   const review = UseInput("");
-  const rating = UseButton("");
-  const title = UseInput("");
-  const weight = UseInput("");
-  const set = UseInput("");
-  const time = UseInput("");
-*/
+  const rating = UseButton();
+  // const weight = UseInput("");
+  // const set = UseInput("");
+  // const time = UseInput("");
+
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
     if (action === "Exercise") {
@@ -80,7 +113,18 @@ export default () => {
     } else if (action === "Workout") {
       setAction("Normal");
     } else if (action === "Inbody") {
-      setAction("Normal");
+      try {
+        await createInbody();
+        await refetch();
+        bodyWeight.setValue("");
+        fat.setValue("");
+        muscle.setValue("");
+        bodyFatRate.setValue("");
+        toast.success("인바디 데이터가 저장되었습니다!");
+        setAction("Normal");
+      } catch (error) {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -105,7 +149,8 @@ export default () => {
   else if (!loading && data && data.getMe && data.getMe.user) {
     const {
       getMe: {
-        user: { username, exercises }
+        user: { username, exercises },
+        latestInbodyData
       }
     } = data;
     const sortedExercises = sortExercises(exercises);
@@ -115,6 +160,7 @@ export default () => {
           username={username}
           exercises={sortedExercises}
           setAction={setAction}
+          inbody={latestInbodyData[0]}
         />
       );
     } else if (action === "Exercise") {
@@ -124,12 +170,51 @@ export default () => {
             username={username}
             exercises={sortedExercises}
             setAction={setAction}
+            inbody={latestInbodyData[0]}
           />
           <Blinder />
           <CreateExercisePopUp
             setAction={setAction}
             bodyPart={bodyPart}
             title={title}
+            onSubmit={onSubmit}
+          />
+        </>
+      );
+    } else if (action === "Workout") {
+      return (
+        <>
+          <HomePresenter
+            username={username}
+            exercises={sortedExercises}
+            setAction={setAction}
+            inbody={latestInbodyData[0]}
+          />
+          <Blinder />
+          <CreateWorkoutPopUp
+            review={review}
+            rating={rating}
+            setAction={setAction}
+            onSubmit={onSubmit}
+          />
+        </>
+      );
+    } else if (action === "Inbody") {
+      return (
+        <>
+          <HomePresenter
+            username={username}
+            exercises={sortedExercises}
+            setAction={setAction}
+            inbody={latestInbodyData[0]}
+          />
+          <Blinder />
+          <CreateInbodyPopUp
+            setAction={setAction}
+            bodyWeight={bodyWeight}
+            fat={fat}
+            muscle={muscle}
+            bodyFatRate={bodyFatRate}
             onSubmit={onSubmit}
           />
         </>

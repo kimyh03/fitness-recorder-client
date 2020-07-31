@@ -1,12 +1,23 @@
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const LOG_USER_OUT = gql`
   mutation logUserOut {
     logUserOut @client
   }
+`;
+
+const RiseEffect = keyframes`
+0%{
+    opacity:0;
+    transform:translateY(7px);
+}
+100%{
+  opacity:1;
+  transform:translateY(0px);
+}
 `;
 
 const Container = styled.div`
@@ -19,6 +30,8 @@ const Container = styled.div`
   justify-content: center;
   position: relative;
   border: 1px solid #e3e6f0;
+
+  animation: ${RiseEffect} 0.5s ease-in-out 0s;
 `;
 
 const Greeting = styled.div`

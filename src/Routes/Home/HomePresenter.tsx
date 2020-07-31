@@ -2,7 +2,19 @@ import React from "react";
 import CreateButton from "src/Components/CreateButton";
 import ExerciseCard from "src/Components/ExerciseCard";
 import Header from "src/Components/Header";
-import styled from "styled-components";
+import InbodyChart from "src/Components/InbodyChart";
+import styled, { keyframes } from "styled-components";
+
+const RiseEffect = keyframes`
+0%{
+    opacity:0;
+    transform:translateY(7px);
+}
+100%{
+  opacity:1;
+  transform:translateY(0px);
+}
+`;
 
 const Title = styled.div`
   margin: 0 0 20px 0;
@@ -16,6 +28,8 @@ const Container = styled.div`
   margin: auto;
   display: flex;
   flex-direction: column;
+  opacity: 0;
+  animation: ${RiseEffect} 1s forwards 0.5s;
 `;
 
 const Section = styled.div`
@@ -37,12 +51,14 @@ interface IProps {
   username: string;
   exercises: any;
   setAction: any;
+  inbody: any;
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
   username,
   exercises,
-  setAction
+  setAction,
+  inbody
 }) => {
   return (
     <>
@@ -61,6 +77,15 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
               <CreateButton type={"Inbody"} />
             </ButtonContainer>
           </Wrapper>
+        </Section>
+        <Section>
+          <Title>InbodyChart</Title>
+          <InbodyChart
+            bodyWeight={inbody.weight}
+            muscle={inbody.muscle}
+            fat={inbody.fat}
+            bodyFatRate={inbody.bodyFatRate}
+          />
         </Section>
         <Section>
           <Title>Exercises</Title>

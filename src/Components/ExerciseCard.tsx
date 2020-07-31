@@ -18,7 +18,6 @@ const Container = styled.div`
   box-shadow: ${(props) => props.theme.boxShadow};
   border: ${(props) => props.theme.border};
   border-radius: 10px;
-  overflow: auto;
 `;
 
 const Header = styled.div`
@@ -33,6 +32,8 @@ const Header = styled.div`
 const Data = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: auto;
+  height: 353px;
 `;
 
 const Coulmn = styled.div`
