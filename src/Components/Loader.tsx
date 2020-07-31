@@ -7,7 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 300px;
+  min-height: 90vh;
   opacity: 0.7;
 `;
 
