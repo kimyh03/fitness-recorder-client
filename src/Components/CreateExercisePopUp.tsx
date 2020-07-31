@@ -5,6 +5,7 @@ const Container = styled.div`
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
+  top: 30%;
   width: 400px;
   height: 150px;
   z-index: 3;
@@ -146,7 +147,14 @@ const CreateExercisePopUp: React.SFC<IProps> = ({
         </BodyPart>
       </BodyPartContainer>
       <Form onSubmit={onSubmit}>
-        <Input value={title.value} onChange={title.onChange}></Input>
+        <Input
+          max={10}
+          type={"text"}
+          required={true}
+          value={title.value}
+          onChange={title.onChange}
+          placeholder={"Exercise name"}
+        ></Input>
         <Button>Create!</Button>
       </Form>
     </Container>
