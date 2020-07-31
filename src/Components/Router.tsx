@@ -6,6 +6,7 @@ import Home from "src/Routes/Home";
 import Inbodies from "src/Routes/Inbodies";
 import Workouts from "src/Routes/Workouts";
 import styled from "styled-components";
+import Footer from "./Footer";
 import NavigationBar from "./NavigationBar";
 
 interface IProps {
@@ -32,6 +33,7 @@ const AppRouter: React.SFC<IProps> = (props) => (
             <Route path={"/inbodies"} exact={true} component={Inbodies} />
           </Switch>
         </Container>
+        <Footer />
       </>
     ) : (
       <Switch>

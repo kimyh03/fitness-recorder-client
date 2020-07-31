@@ -11,9 +11,6 @@ export default createGlobalStyle`
         color:${(props) => props.theme.blackColor};
         font-size:14px;
         width:100%;
-        margin: 0;
-        margin: auto;
-        height:100fr;
     }
     a {
         color:inherit;

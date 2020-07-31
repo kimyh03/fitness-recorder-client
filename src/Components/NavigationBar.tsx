@@ -11,7 +11,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-
+  z-index: 2;
   background: rgb(78, 115, 223);
   background: linear-gradient(
     90deg,
