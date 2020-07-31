@@ -85,6 +85,7 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
             muscle={inbody.muscle}
             fat={inbody.fat}
             bodyFatRate={inbody.bodyFatRate}
+            createdAt={inbody.createdAt.substring(0, 10)}
           />
         </Section>
         <Section>

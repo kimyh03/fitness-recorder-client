@@ -91,23 +91,33 @@ const FilledBar = styled.div<{ range: string }>`
   animation: ${ChartEffect} 1s ease-in-out 0.5s;
 `;
 
+const Date = styled.div`
+  width: 100%;
+  text-align: right;
+  margin-bottom: 15px;
+  opacity: 0.7;
+`;
+
 interface Iprops {
   bodyWeight: string;
   muscle: string;
   fat: string;
   bodyFatRate: string;
+  createdAt: string;
 }
 
 const InbodyChart: React.SFC<Iprops> = ({
   bodyWeight,
   muscle,
   fat,
-  bodyFatRate
+  bodyFatRate,
+  createdAt
 }) => {
   return (
     <Container>
       <Header>Latest inbody data</Header>
       <ChartContainer>
+        <Date>{`Record date : ${createdAt}`}</Date>
         <Wrapper>
           <ChartHeader>
             <Title>Weight</Title>

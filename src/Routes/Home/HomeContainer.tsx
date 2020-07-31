@@ -39,6 +39,7 @@ const GET_MY_DATA = gql`
         fat
         muscle
         bodyFatRate
+        createdAt
       }
     }
   }
