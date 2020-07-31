@@ -41,6 +41,7 @@ const GET_MY_DATA = gql`
         bodyFatRate
         createdAt
       }
+      error
     }
   }
 `;
@@ -81,7 +82,10 @@ export default () => {
   const bodyFatRate = UseInput("");
   const { loading, data, refetch } = useQuery(GET_MY_DATA);
   const [createExercise] = useMutation(CREATE_EXERCISE, {
-    variables: { bodyPart: bodyPart.value, title: title.value }
+    variables: { bodyPart: bodyPart.value, title: title.value },
+    onError(error) {
+      throw new Error(error.message.substring(15));
+    }
   });
   const [createInbody] = useMutation(CREATE_INBODY, {
     variables: {
@@ -102,12 +106,15 @@ export default () => {
     event.preventDefault();
     if (action === "Exercise") {
       try {
-        await createExercise();
-        await refetch();
-        bodyPart.setValue("");
-        title.setValue("");
-        toast.success("나의 운동이 추가 되었습니다!");
-        setAction("Normal");
+        if (bodyPart.value === "") toast.error("운동부위를 선택해주세요");
+        else {
+          await createExercise();
+          await refetch();
+          bodyPart.setValue("");
+          title.setValue("");
+          toast.success("나의 운동이 추가 되었습니다!");
+          setAction("Normal");
+        }
       } catch (error) {
         toast.error(error.message);
       }
