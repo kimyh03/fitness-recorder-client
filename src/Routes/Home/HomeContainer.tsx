@@ -54,6 +54,14 @@ const CREATE_EXERCISE = gql`
   }
 `;
 
+const DELETE_EXERCISE = gql`
+  mutation deleteExercise($id: String!) {
+    deleteExercise(id: $id) {
+      ok
+    }
+  }
+`;
+
 const CREATE_INBODY = gql`
   mutation createInbodyData(
     $weight: String!
@@ -87,6 +95,7 @@ export default () => {
       throw new Error(error.message.substring(15));
     }
   });
+  const [deleteExercise] = useMutation(DELETE_EXERCISE);
   const [createInbody] = useMutation(CREATE_INBODY, {
     variables: {
       weight: bodyWeight.value,
@@ -101,6 +110,21 @@ export default () => {
   // const weight = UseInput("");
   // const set = UseInput("");
   // const time = UseInput("");
+
+  const onClick = async (event) => {
+    if (window.confirm("종목을 삭제하면 데이터를 모두 잃습니다. 괜찮니?")) {
+      const {
+        target: { value }
+      } = event;
+      try {
+        await deleteExercise({ variables: { id: value } });
+        await refetch();
+        toast.success("삭제오케이");
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  };
 
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
@@ -169,6 +193,7 @@ export default () => {
           exercises={sortedExercises}
           setAction={setAction}
           inbody={latestInbodyData[0]}
+          onClick={onClick}
         />
       );
     } else if (action === "Exercise") {
@@ -179,6 +204,7 @@ export default () => {
             exercises={sortedExercises}
             setAction={setAction}
             inbody={latestInbodyData[0]}
+            onClick={onClick}
           />
           <Blinder />
           <CreateExercisePopUp
@@ -197,6 +223,7 @@ export default () => {
             exercises={sortedExercises}
             setAction={setAction}
             inbody={latestInbodyData[0]}
+            onClick={onClick}
           />
           <Blinder />
           <CreateWorkoutPopUp
@@ -215,6 +242,7 @@ export default () => {
             exercises={sortedExercises}
             setAction={setAction}
             inbody={latestInbodyData[0]}
+            onClick={onClick}
           />
           <Blinder />
           <CreateInbodyPopUp

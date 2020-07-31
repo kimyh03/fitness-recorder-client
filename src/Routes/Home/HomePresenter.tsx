@@ -3,6 +3,7 @@ import CreateButton from "src/Components/CreateButton";
 import ExerciseCard from "src/Components/ExerciseCard";
 import Header from "src/Components/Header";
 import InbodyChart from "src/Components/InbodyChart";
+import NoInbodyChart from "src/Components/NoInbodyChart";
 import styled, { keyframes } from "styled-components";
 
 const RiseEffect = keyframes`
@@ -52,13 +53,15 @@ interface IProps {
   exercises: any;
   setAction: any;
   inbody: any;
+  onClick: any;
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
   username,
   exercises,
   setAction,
-  inbody
+  inbody,
+  onClick
 }) => {
   return (
     <>
@@ -80,25 +83,46 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
         </Section>
         <Section>
           <Title>InbodyChart</Title>
-          <InbodyChart
-            bodyWeight={inbody.weight}
-            muscle={inbody.muscle}
-            fat={inbody.fat}
-            bodyFatRate={inbody.bodyFatRate}
-            createdAt={inbody.createdAt.substring(0, 10)}
-          />
+          {inbody ? (
+            <InbodyChart
+              bodyWeight={inbody.weight}
+              muscle={inbody.muscle}
+              fat={inbody.fat}
+              bodyFatRate={inbody.bodyFatRate}
+              createdAt={inbody.createdAt.substring(0, 10)}
+            />
+          ) : (
+            <NoInbodyChart />
+          )}
         </Section>
         <Section>
           <Title>Exercises</Title>
           <Wrapper>
-            <ExerciseCard bodyPart={"Chest"} exercises={exercises.chest} />
-            <ExerciseCard bodyPart={"Back"} exercises={exercises.back} />
             <ExerciseCard
+              onClick={onClick}
+              bodyPart={"Chest"}
+              exercises={exercises.chest}
+            />
+            <ExerciseCard
+              onClick={onClick}
+              bodyPart={"Back"}
+              exercises={exercises.back}
+            />
+            <ExerciseCard
+              onClick={onClick}
               bodyPart={"Shoulder"}
               exercises={exercises.shoulder}
             />
-            <ExerciseCard bodyPart={"Leg"} exercises={exercises.leg} />
-            <ExerciseCard bodyPart={"Arm"} exercises={exercises.arm} />
+            <ExerciseCard
+              onClick={onClick}
+              bodyPart={"Leg"}
+              exercises={exercises.leg}
+            />
+            <ExerciseCard
+              onClick={onClick}
+              bodyPart={"Arm"}
+              exercises={exercises.arm}
+            />
           </Wrapper>
         </Section>
       </Container>

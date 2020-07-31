@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 interface Exercise {
+  id: string;
   title: string;
   latestRecord: string;
 }
@@ -9,6 +10,7 @@ interface Exercise {
 interface IProps {
   bodyPart: string;
   exercises: Exercise[];
+  onClick: any;
 }
 
 const Container = styled.div`
@@ -66,12 +68,14 @@ const NoData = styled.div`
   width: 100%;
   text-align: center;
   margin-top: 100px;
-  color: #4e73df;
-  opacity: 0.7;
-  font-weight: 700;
+  opacity: 0.6;
 `;
 
-const ExerciseCard: React.SFC<IProps> = ({ bodyPart, exercises }) => {
+const DeleteButton = styled.button`
+  color: red;
+`;
+
+const ExerciseCard: React.SFC<IProps> = ({ bodyPart, exercises, onClick }) => {
   if (exercises.length === 0) {
     return (
       <Container>
@@ -85,7 +89,10 @@ const ExerciseCard: React.SFC<IProps> = ({ bodyPart, exercises }) => {
         <Header>{bodyPart}</Header>
         <Data>
           {exercises.map((item) => (
-            <Coulmn>
+            <Coulmn key={item.id}>
+              <DeleteButton value={item.id} onClick={onClick}>
+                X
+              </DeleteButton>
               <TitleCoulmn>{item.title}</TitleCoulmn>
               <RecordCoulmn>
                 {item.latestRecord ? `${item.latestRecord} kg` : "0 kg"}
