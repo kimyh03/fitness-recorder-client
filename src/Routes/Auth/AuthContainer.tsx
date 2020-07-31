@@ -41,9 +41,7 @@ export default () => {
   const username = UseInput("");
   const confirmPassword = UseInput("");
   const [action, setAction] = useState("logIn");
-  const [logIn] = useMutation(LOG_IN, {
-    variables: { email: email.value, password: password.value }
-  });
+  const [logIn] = useMutation(LOG_IN);
   const [localLogIn] = useMutation(LOCAL_LOG_IN);
   const [signUp] = useMutation(SIGN_UP, {
     variables: {
@@ -65,10 +63,14 @@ export default () => {
           data: {
             signIn: { token }
           }
-        } = await logIn();
+        } = await logIn({
+          variables: { email: email.value, password: password.value }
+        });
         if (token) {
           await localLogIn({ variables: { token } });
-          toast.success("반갑습니다! 오늘도 즐거운 하루를 만드세요.");
+          await email.setValue("");
+          await password.setValue("");
+          window.location.reload();
         } else {
           toast.error("이메일 혹은 비밀번호를 찾을 수 없습니다.");
         }
