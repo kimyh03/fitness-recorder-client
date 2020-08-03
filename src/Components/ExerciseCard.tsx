@@ -20,6 +20,11 @@ const Container = styled.div`
   box-shadow: ${(props) => props.theme.boxShadow};
   border: ${(props) => props.theme.border};
   border-radius: 10px;
+  :hover {
+    transform: translateY(-5px);
+    transform: scale(1.03);
+  }
+  transition: transform 0.2s ease-in-out 0s;
 `;
 
 const Header = styled.div`

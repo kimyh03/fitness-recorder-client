@@ -7,6 +7,11 @@ const Container = styled.div`
   border-radius: 10px;
   border: ${(props) => props.theme.border};
   box-shadow: ${(props) => props.theme.boxShadow};
+  :hover {
+    transform: translateY(-5px);
+    transform: scale(1.03);
+  }
+  transition: transform 0.2s ease-in-out 0s;
 `;
 
 const Header = styled.div`
