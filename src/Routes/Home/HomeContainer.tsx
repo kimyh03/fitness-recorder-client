@@ -8,6 +8,7 @@ import CreateWorkoutPopUp from "src/Components/CreateWorkoutPopUp";
 import Loader from "src/Components/Loader";
 import UseButton from "src/Hooks/UseButton";
 import UseInput from "src/Hooks/UseInput";
+import sortExercises from "src/utils/sortExercises";
 import styled from "styled-components";
 import HomePresenter from "./HomePresenter";
 
@@ -81,7 +82,9 @@ const CREATE_INBODY = gql`
 `;
 
 export default () => {
-  const [action, setAction] = useState("Normal");
+  const types = ["exercise", "workout", "inbody"];
+  const bodyParts = ["chest", "back", "shoulder", "leg", "arm"];
+  const [action, setAction] = useState("normal");
   const bodyPart = UseButton();
   const title = UseInput("");
   const bodyWeight = UseInput("");
@@ -128,7 +131,7 @@ export default () => {
 
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
-    if (action === "Exercise") {
+    if (action === "exercise") {
       try {
         if (bodyPart.value === "") toast.error("운동부위를 선택해주세요");
         else {
@@ -137,14 +140,14 @@ export default () => {
           bodyPart.setValue("");
           title.setValue("");
           toast.success("나의 운동이 추가 되었습니다!");
-          setAction("Normal");
+          setAction("normal");
         }
       } catch (error) {
         toast.error(error.message);
       }
-    } else if (action === "Workout") {
-      setAction("Normal");
-    } else if (action === "Inbody") {
+    } else if (action === "workout") {
+      setAction("normal");
+    } else if (action === "inbody") {
       try {
         await createInbody();
         await refetch();
@@ -153,28 +156,11 @@ export default () => {
         muscle.setValue("");
         bodyFatRate.setValue("");
         toast.success("인바디 데이터가 저장되었습니다!");
-        setAction("Normal");
+        setAction("normal");
       } catch (error) {
         toast.error(error.message);
       }
     }
-  };
-
-  const sortExercises = (exercise: any) => {
-    const ChestExercises = exercise.filter((item) => item.bodyPart === "Chest");
-    const backExercises = exercise.filter((item) => item.bodyPart === "Back");
-    const shoulderExercises = exercise.filter(
-      (item) => item.bodyPart === "Shoulder"
-    );
-    const legExercises = exercise.filter((item) => item.bodyPart === "Leg");
-    const armExercises = exercise.filter((item) => item.bodyPart === "Arm");
-    return {
-      chest: ChestExercises,
-      back: backExercises,
-      shoulder: shoulderExercises,
-      leg: legExercises,
-      arm: armExercises
-    };
   };
 
   if (loading) return <Loader />;
@@ -186,65 +172,35 @@ export default () => {
       }
     } = data;
     const sortedExercises = sortExercises(exercises);
-    if (action === "Normal") {
-      return (
+    return (
+      <>
         <HomePresenter
           username={username}
           exercises={sortedExercises}
           setAction={setAction}
           inbody={latestInbodyData[0]}
           onClick={onClick}
+          types={types}
+          bodyParts={bodyParts}
         />
-      );
-    } else if (action === "Exercise") {
-      return (
-        <>
-          <HomePresenter
-            username={username}
-            exercises={sortedExercises}
-            setAction={setAction}
-            inbody={latestInbodyData[0]}
-            onClick={onClick}
-          />
-          <Blinder />
+        {action !== "normal" && <Blinder />}
+        {action === "exercise" && (
           <CreateExercisePopUp
             setAction={setAction}
             bodyPart={bodyPart}
             title={title}
             onSubmit={onSubmit}
           />
-        </>
-      );
-    } else if (action === "Workout") {
-      return (
-        <>
-          <HomePresenter
-            username={username}
-            exercises={sortedExercises}
-            setAction={setAction}
-            inbody={latestInbodyData[0]}
-            onClick={onClick}
-          />
-          <Blinder />
+        )}
+        {action === "workout" && (
           <CreateWorkoutPopUp
             review={review}
             rating={rating}
             setAction={setAction}
             onSubmit={onSubmit}
           />
-        </>
-      );
-    } else if (action === "Inbody") {
-      return (
-        <>
-          <HomePresenter
-            username={username}
-            exercises={sortedExercises}
-            setAction={setAction}
-            inbody={latestInbodyData[0]}
-            onClick={onClick}
-          />
-          <Blinder />
+        )}
+        {action === "inbody" && (
           <CreateInbodyPopUp
             setAction={setAction}
             bodyWeight={bodyWeight}
@@ -253,8 +209,8 @@ export default () => {
             bodyFatRate={bodyFatRate}
             onSubmit={onSubmit}
           />
-        </>
-      );
-    } else return null;
+        )}
+      </>
+    );
   } else return null;
 };
