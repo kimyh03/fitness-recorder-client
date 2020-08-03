@@ -5,6 +5,7 @@ import Header from "src/Components/Header";
 import InbodyChart from "src/Components/InbodyChart";
 import NoInbodyChart from "src/Components/NoInbodyChart";
 import styled, { keyframes } from "styled-components";
+console.log("Test revert commit");
 
 const RiseEffect = keyframes`
 0%{
