@@ -44,15 +44,15 @@ const CreateButton: React.SFC<IProps> = ({ type }) => {
   let color = "";
   let subTitle = "";
   switch (type) {
-    case "Exercise":
+    case "exercise":
       color = "#4E73DF";
       subTitle = "Add a new exercise to your list!";
       break;
-    case "Workout":
+    case "workout":
       color = "#1CC88A";
       subTitle = "Did you workout today? Record It!";
       break;
-    case "Inbody":
+    case "inbody":
       color = "#E74A3B";
       subTitle = "Don't forget to record your Inbody data!";
   }

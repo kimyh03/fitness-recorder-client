@@ -91,7 +91,7 @@ const CreateInbodyPopUp: React.SFC<IProps> = ({
     <Container>
       <Header>
         인바디
-        <ExitButton onClick={() => setAction("Normal")}>X</ExitButton>
+        <ExitButton onClick={() => setAction("normal")}>X</ExitButton>
       </Header>
       <Form onSubmit={onSubmit}>
         <Input

@@ -107,7 +107,7 @@ const CreateExercisePopUp: React.SFC<IProps> = ({
     <Container>
       <Header>
         Create new exercise!
-        <ExitButton onClick={() => setAction("Normal")}>X</ExitButton>
+        <ExitButton onClick={() => setAction("normal")}>X</ExitButton>
       </Header>
       <BodyPartContainer>
         <BodyPart

@@ -54,6 +54,8 @@ interface IProps {
   setAction: any;
   inbody: any;
   onClick: any;
+  types: string[];
+  bodyParts: string[];
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
@@ -61,7 +63,9 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   exercises,
   setAction,
   inbody,
-  onClick
+  onClick,
+  types,
+  bodyParts
 }) => {
   return (
     <>
@@ -70,15 +74,11 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
         <Section>
           <Title>Record your body!</Title>
           <Wrapper>
-            <ButtonContainer onClick={() => setAction("Exercise")}>
-              <CreateButton type={"Exercise"} />
-            </ButtonContainer>
-            <ButtonContainer onClick={() => setAction("Workout")}>
-              <CreateButton type={"Workout"} />
-            </ButtonContainer>
-            <ButtonContainer onClick={() => setAction("Inbody")}>
-              <CreateButton type={"Inbody"} />
-            </ButtonContainer>
+            {types.map((type) => (
+              <ButtonContainer key={type} onClick={() => setAction(type)}>
+                <CreateButton type={type} />
+              </ButtonContainer>
+            ))}
           </Wrapper>
         </Section>
         <Section>
@@ -98,31 +98,14 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
         <Section>
           <Title>Exercises</Title>
           <Wrapper>
-            <ExerciseCard
-              onClick={onClick}
-              bodyPart={"Chest"}
-              exercises={exercises.chest}
-            />
-            <ExerciseCard
-              onClick={onClick}
-              bodyPart={"Back"}
-              exercises={exercises.back}
-            />
-            <ExerciseCard
-              onClick={onClick}
-              bodyPart={"Shoulder"}
-              exercises={exercises.shoulder}
-            />
-            <ExerciseCard
-              onClick={onClick}
-              bodyPart={"Leg"}
-              exercises={exercises.leg}
-            />
-            <ExerciseCard
-              onClick={onClick}
-              bodyPart={"Arm"}
-              exercises={exercises.arm}
-            />
+            {bodyParts.map((bodyPart, index) => (
+              <ExerciseCard
+                key={bodyPart}
+                onClick={onClick}
+                bodyPart={bodyPart}
+                exercises={exercises[index]}
+              />
+            ))}
           </Wrapper>
         </Section>
       </Container>
