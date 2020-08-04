@@ -41,7 +41,6 @@ const BodyPart = styled.button<{ isClicked: boolean }>`
   color: ${(props) => (props.isClicked ? "white" : "inherit")};
   border: ${(props) => props.theme.border};
   border-radius: 20px;
-  margin-left: 5px;
   :hover {
     background: #4e73df;
     color: white;
@@ -49,10 +48,10 @@ const BodyPart = styled.button<{ isClicked: boolean }>`
 `;
 
 const BodyPartContainer = styled.div`
-  width: 100%;
+  width: 80%;
   display: flex;
   margin-top: 10px;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const Form = styled.form`
@@ -95,13 +94,15 @@ interface IProps {
   bodyPart: any;
   title: any;
   onSubmit: any;
+  bodyParts: any;
 }
 
 const CreateExercisePopUp: React.SFC<IProps> = ({
   setAction,
   bodyPart,
   title,
-  onSubmit
+  onSubmit,
+  bodyParts
 }) => {
   return (
     <Container>
@@ -110,41 +111,16 @@ const CreateExercisePopUp: React.SFC<IProps> = ({
         <ExitButton onClick={() => setAction("normal")}>X</ExitButton>
       </Header>
       <BodyPartContainer>
-        <BodyPart
-          value={"Chest"}
-          onClick={bodyPart.onClick}
-          isClicked={bodyPart.value === "Chest"}
-        >
-          Chest
-        </BodyPart>
-        <BodyPart
-          value={"Back"}
-          onClick={bodyPart.onClick}
-          isClicked={bodyPart.value === "Back"}
-        >
-          Back
-        </BodyPart>
-        <BodyPart
-          value={"Shoulder"}
-          onClick={bodyPart.onClick}
-          isClicked={bodyPart.value === "Shoulder"}
-        >
-          Shoulder
-        </BodyPart>
-        <BodyPart
-          value={"Leg"}
-          onClick={bodyPart.onClick}
-          isClicked={bodyPart.value === "Leg"}
-        >
-          Leg
-        </BodyPart>
-        <BodyPart
-          value={"Arm"}
-          onClick={bodyPart.onClick}
-          isClicked={bodyPart.value === "Arm"}
-        >
-          Arm
-        </BodyPart>
+        {bodyParts.map((part, index) => (
+          <BodyPart
+            key={index}
+            value={part}
+            onClick={bodyPart.onClick}
+            isClicked={bodyPart.value === part}
+          >
+            {part}
+          </BodyPart>
+        ))}
       </BodyPartContainer>
       <Form onSubmit={onSubmit}>
         <Input

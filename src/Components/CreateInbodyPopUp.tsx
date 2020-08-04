@@ -49,7 +49,6 @@ const Input = styled.input`
   padding: 10px 0;
   margin-bottom: 20px;
   text-align: center;
-  opacity: 0.7;
   border: ${(props) => props.theme.border};
   border-radius: 7px;
 `;

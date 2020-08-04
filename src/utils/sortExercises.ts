@@ -1,11 +1,19 @@
-const sortExercises = (exercise: any) => {
-  const chestExercises = exercise.filter((item) => item.bodyPart === "Chest");
-  const backExercises = exercise.filter((item) => item.bodyPart === "Back");
-  const shoulderExercises = exercise.filter(
-    (item) => item.bodyPart === "Shoulder"
+const sortExercises = (exercise, bodyParts) => {
+  const chestExercises = exercise.filter(
+    (item) => item.bodyPart === bodyParts[0]
   );
-  const legExercises = exercise.filter((item) => item.bodyPart === "Leg");
-  const armExercises = exercise.filter((item) => item.bodyPart === "Arm");
+  const backExercises = exercise.filter(
+    (item) => item.bodyPart === bodyParts[1]
+  );
+  const shoulderExercises = exercise.filter(
+    (item) => item.bodyPart === bodyParts[2]
+  );
+  const legExercises = exercise.filter(
+    (item) => item.bodyPart === bodyParts[3]
+  );
+  const armExercises = exercise.filter(
+    (item) => item.bodyPart === bodyParts[4]
+  );
   return [
     chestExercises,
     backExercises,
