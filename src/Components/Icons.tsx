@@ -73,13 +73,25 @@ export const Create = ({ color }) => (
 );
 
 export const Exit = () => (
-  <svg
-    width="15"
-    height="15"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="#4e73df"
-  >
+  <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" fill="#4e73df">
     <path d="M11 21h8v-2l1-1v4h-9v2l-10-3v-18l10-3v2h9v5l-1-1v-3h-8v18zm10.053-9l-3.293-3.293.707-.707 4.5 4.5-4.5 4.5-.707-.707 3.293-3.293h-9.053v-1h9.053z" />
+  </svg>
+);
+
+export const StarFull = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#F8D82C">
+    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
+  </svg>
+);
+
+export const StarEmpty = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="#F8D82C"
+  >
+    <path d="M12 5.173l2.335 4.817 5.305.732-3.861 3.71.942 5.27-4.721-2.524-4.721 2.525.942-5.27-3.861-3.71 5.305-.733 2.335-4.817zm0-4.586l-3.668 7.568-8.332 1.151 6.064 5.828-1.48 8.279 7.416-3.967 7.416 3.966-1.48-8.279 6.064-5.827-8.332-1.15-3.668-7.569z" />
   </svg>
 );

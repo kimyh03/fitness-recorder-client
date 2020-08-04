@@ -40,7 +40,7 @@ const GET_MY_DATA = gql`
         fat
         muscle
         bodyFatRate
-        createdAt
+        recordDate
       }
       error
     }
@@ -69,12 +69,30 @@ const CREATE_INBODY = gql`
     $fat: String!
     $muscle: String!
     $bodyFatRate: String!
+    $recordDate: String!
   ) {
     createInbodyData(
       weight: $weight
       fat: $fat
       muscle: $muscle
       bodyFatRate: $bodyFatRate
+      recordDate: $recordDate
+    ) {
+      ok
+    }
+  }
+`;
+
+const CREATE_WORKOUT = gql`
+  mutation createWorkout(
+    $routineItems: [RoutineItem!]!
+    $review: String!
+    $rating: String!
+  ) {
+    createWorkout(
+      routineItems: $routineItems
+      review: $review
+      rating: $rating
     ) {
       ok
     }
@@ -87,10 +105,16 @@ export default () => {
   const [action, setAction] = useState("normal");
   const bodyPart = UseButton();
   const title = UseInput("");
+  const date = UseInput("");
   const bodyWeight = UseInput("");
   const fat = UseInput("");
   const muscle = UseInput("");
   const bodyFatRate = UseInput("");
+  const review = UseInput("");
+  const [rating, setRating] = useState("");
+  const blankWorkoutItem = { title: "", weight: "", set: "" };
+  const [workoutItem, setWorkoutItem] = useState([{ ...blankWorkoutItem }]);
+
   const { loading, data, refetch } = useQuery(GET_MY_DATA);
   const [createExercise] = useMutation(CREATE_EXERCISE, {
     variables: { bodyPart: bodyPart.value, title: title.value },
@@ -98,29 +122,57 @@ export default () => {
       throw new Error(error.message.substring(15));
     }
   });
-  const [deleteExercise] = useMutation(DELETE_EXERCISE);
+  const [createWorkout] = useMutation(CREATE_WORKOUT, {
+    variables: {
+      routineItems: workoutItem,
+      review: review.value,
+      rating
+    }
+  });
+  const [deleteExerciseMutation] = useMutation(DELETE_EXERCISE);
   const [createInbody] = useMutation(CREATE_INBODY, {
     variables: {
       weight: bodyWeight.value,
       fat: fat.value,
       muscle: muscle.value,
-      bodyFatRate: bodyFatRate.value
+      bodyFatRate: bodyFatRate.value,
+      recordDate: date.value
     }
   });
 
-  const review = UseInput("");
-  const rating = UseButton();
-  // const weight = UseInput("");
-  // const set = UseInput("");
-  // const time = UseInput("");
+  const addWorkoutItem = (event) => {
+    event.preventDefault();
+    setWorkoutItem([...workoutItem, { ...blankWorkoutItem }]);
+  };
+  const handleWorkoutChange = (event) => {
+    const {
+      target: {
+        value,
+        className,
+        dataset: { index }
+      }
+    } = event;
+    const updatedWorkout = [...workoutItem];
+    updatedWorkout[index][className.substring(17)] = value;
+    setWorkoutItem(updatedWorkout);
+    console.log(workoutItem);
+  };
 
-  const onClick = async (event) => {
+  const clearWorkoutPopUp = async () => {
+    setWorkoutItem([{ ...blankWorkoutItem }]);
+    review.setValue("");
+    setRating("");
+    await refetch();
+    setAction("normal");
+  };
+
+  const deleteExercise = async (event) => {
     if (window.confirm("종목을 삭제하면 데이터를 모두 잃습니다. 괜찮니?")) {
       const {
         target: { value }
       } = event;
       try {
-        await deleteExercise({ variables: { id: value } });
+        await deleteExerciseMutation({ variables: { id: value } });
         await refetch();
         toast.success("삭제오케이");
       } catch (error) {
@@ -146,12 +198,21 @@ export default () => {
         toast.error(error.message);
       }
     } else if (action === "workout") {
-      setAction("normal");
+      try {
+        await createWorkout();
+        await refetch();
+        clearWorkoutPopUp();
+        toast.success("워크아웃이 성공적으로 등록 되었습니다!");
+      } catch (error) {
+        toast.error(error.message);
+      }
     } else if (action === "inbody") {
       try {
+        console.log(typeof date.value);
         await createInbody();
         await refetch();
         bodyWeight.setValue("");
+        date.setValue("");
         fat.setValue("");
         muscle.setValue("");
         bodyFatRate.setValue("");
@@ -171,7 +232,7 @@ export default () => {
         latestInbodyData
       }
     } = data;
-    const sortedExercises = sortExercises(exercises);
+    const sortedExercises = sortExercises(exercises, bodyParts);
     return (
       <>
         <HomePresenter
@@ -179,7 +240,7 @@ export default () => {
           exercises={sortedExercises}
           setAction={setAction}
           inbody={latestInbodyData[0]}
-          onClick={onClick}
+          deleteExercise={deleteExercise}
           types={types}
           bodyParts={bodyParts}
         />
@@ -190,14 +251,21 @@ export default () => {
             bodyPart={bodyPart}
             title={title}
             onSubmit={onSubmit}
+            bodyParts={bodyParts}
           />
         )}
         {action === "workout" && (
           <CreateWorkoutPopUp
             review={review}
+            setRating={setRating}
             rating={rating}
-            setAction={setAction}
+            exitWorkoutPopUp={clearWorkoutPopUp}
             onSubmit={onSubmit}
+            workoutItem={workoutItem}
+            addWorkoutItem={addWorkoutItem}
+            handleWorkoutChange={handleWorkoutChange}
+            exercises={sortedExercises}
+            bodyParts={bodyParts}
           />
         )}
         {action === "inbody" && (
@@ -207,6 +275,7 @@ export default () => {
             fat={fat}
             muscle={muscle}
             bodyFatRate={bodyFatRate}
+            date={date}
             onSubmit={onSubmit}
           />
         )}
