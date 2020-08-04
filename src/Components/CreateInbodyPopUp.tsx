@@ -77,6 +77,7 @@ interface IProps {
   muscle: any;
   bodyFatRate: any;
   onSubmit: any;
+  date: any;
 }
 
 const CreateInbodyPopUp: React.SFC<IProps> = ({
@@ -85,7 +86,8 @@ const CreateInbodyPopUp: React.SFC<IProps> = ({
   muscle,
   fat,
   bodyFatRate,
-  onSubmit
+  onSubmit,
+  date
 }) => {
   return (
     <Container>
@@ -94,6 +96,13 @@ const CreateInbodyPopUp: React.SFC<IProps> = ({
         <ExitButton onClick={() => setAction("normal")}>X</ExitButton>
       </Header>
       <Form onSubmit={onSubmit}>
+        <Input
+          placeholder={"측정일시"}
+          value={date.value}
+          onChange={date.onChange}
+          required={true}
+          type={"date"}
+        ></Input>
         <Input
           placeholder={"bodyWeight (kg)"}
           value={bodyWeight.value}

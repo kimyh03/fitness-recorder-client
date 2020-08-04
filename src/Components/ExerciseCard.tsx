@@ -10,7 +10,7 @@ interface Exercise {
 interface IProps {
   bodyPart: string;
   exercises: Exercise[];
-  onClick: any;
+  deleteExercise: any;
 }
 
 const Container = styled.div`
@@ -80,7 +80,11 @@ const DeleteButton = styled.button`
   color: red;
 `;
 
-const ExerciseCard: React.SFC<IProps> = ({ bodyPart, exercises, onClick }) => {
+const ExerciseCard: React.SFC<IProps> = ({
+  bodyPart,
+  exercises,
+  deleteExercise
+}) => {
   if (exercises.length === 0) {
     return (
       <Container>
@@ -95,7 +99,7 @@ const ExerciseCard: React.SFC<IProps> = ({ bodyPart, exercises, onClick }) => {
         <Data>
           {exercises.map((item) => (
             <Coulmn key={item.id}>
-              <DeleteButton value={item.id} onClick={onClick}>
+              <DeleteButton value={item.id} onClick={deleteExercise}>
                 X
               </DeleteButton>
               <TitleCoulmn>{item.title}</TitleCoulmn>

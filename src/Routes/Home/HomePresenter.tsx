@@ -53,7 +53,7 @@ interface IProps {
   exercises: any;
   setAction: any;
   inbody: any;
-  onClick: any;
+  deleteExercise: any;
   types: string[];
   bodyParts: string[];
 }
@@ -63,7 +63,7 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   exercises,
   setAction,
   inbody,
-  onClick,
+  deleteExercise,
   types,
   bodyParts
 }) => {
@@ -89,7 +89,7 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
               muscle={inbody.muscle}
               fat={inbody.fat}
               bodyFatRate={inbody.bodyFatRate}
-              createdAt={inbody.createdAt.substring(0, 10)}
+              recordDate={inbody.recordDate}
             />
           ) : (
             <NoInbodyChart />
@@ -101,7 +101,7 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
             {bodyParts.map((bodyPart, index) => (
               <ExerciseCard
                 key={bodyPart}
-                onClick={onClick}
+                deleteExercise={deleteExercise}
                 bodyPart={bodyPart}
                 exercises={exercises[index]}
               />

@@ -108,7 +108,7 @@ interface Iprops {
   muscle: string;
   fat: string;
   bodyFatRate: string;
-  createdAt: string;
+  recordDate: string;
 }
 
 const InbodyChart: React.SFC<Iprops> = ({
@@ -116,13 +116,13 @@ const InbodyChart: React.SFC<Iprops> = ({
   muscle,
   fat,
   bodyFatRate,
-  createdAt
+  recordDate
 }) => {
   return (
     <Container>
       <Header>Latest inbody data</Header>
       <ChartContainer>
-        <Date>{`Record date : ${createdAt}`}</Date>
+        <Date>{`Record date : ${recordDate}`}</Date>
         <Wrapper>
           <ChartHeader>
             <Title>Weight</Title>
