@@ -175,7 +175,7 @@ const CreateWorkoutPopUp: React.SFC<IProps> = ({
   exercises,
   bodyParts
 }) => {
-  const values = ["1", "2", "3", "4", "5"];
+  const values = [1, 2, 3, 4, 5];
   return (
     <Container>
       <Header>

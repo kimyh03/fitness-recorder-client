@@ -4,6 +4,8 @@ import ExerciseCard from "src/Components/ExerciseCard";
 import Header from "src/Components/Header";
 import InbodyChart from "src/Components/InbodyChart";
 import NoInbodyChart from "src/Components/NoInbodyChart";
+import NoWorkout from "src/Components/NoWorkout";
+import WorkoutChart from "src/Components/WorkoutChart";
 import styled, { keyframes } from "styled-components";
 
 const RiseEffect = keyframes`
@@ -48,12 +50,22 @@ const ButtonContainer = styled.div`
   width: 30%;
 `;
 
+const InbodyContainer = styled.div`
+  width: 38%;
+`;
+
+const WorkoutContainer = styled.div`
+  width: 60%;
+`;
+
 interface IProps {
   username: string;
   exercises: any;
   setAction: any;
   inbody: any;
   deleteExercise: any;
+  workouts: any;
+  records: any;
   types: string[];
   bodyParts: string[];
 }
@@ -65,7 +77,9 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   inbody,
   deleteExercise,
   types,
-  bodyParts
+  bodyParts,
+  workouts,
+  records
 }) => {
   return (
     <>
@@ -82,18 +96,34 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
           </Wrapper>
         </Section>
         <Section>
-          <Title>InbodyChart</Title>
-          {inbody ? (
-            <InbodyChart
-              bodyWeight={inbody.weight}
-              muscle={inbody.muscle}
-              fat={inbody.fat}
-              bodyFatRate={inbody.bodyFatRate}
-              recordDate={inbody.recordDate}
-            />
-          ) : (
-            <NoInbodyChart />
-          )}
+          <Wrapper>
+            <InbodyContainer>
+              <Title>InbodyChart</Title>
+              {inbody ? (
+                <InbodyChart
+                  bodyWeight={inbody.weight}
+                  muscle={inbody.muscle}
+                  fat={inbody.fat}
+                  bodyFatRate={inbody.bodyFatRate}
+                  recordDate={inbody.recordDate}
+                />
+              ) : (
+                <NoInbodyChart />
+              )}
+            </InbodyContainer>
+            <WorkoutContainer>
+              <Title>This month Workout</Title>
+              {workouts.length > 0 ? (
+                <WorkoutChart
+                  bodyParts={bodyParts}
+                  workouts={workouts}
+                  records={records}
+                />
+              ) : (
+                <NoWorkout />
+              )}
+            </WorkoutContainer>
+          </Wrapper>
         </Section>
         <Section>
           <Title>Exercises</Title>

@@ -8,7 +8,7 @@ import CreateWorkoutPopUp from "src/Components/CreateWorkoutPopUp";
 import Loader from "src/Components/Loader";
 import UseButton from "src/Hooks/UseButton";
 import UseInput from "src/Hooks/UseInput";
-import sortExercises from "src/utils/sortExercises";
+import sortByBodyPart from "src/utils/sortByBodyPart";
 import styled from "styled-components";
 import HomePresenter from "./HomePresenter";
 
@@ -41,6 +41,15 @@ const GET_MY_DATA = gql`
         muscle
         bodyFatRate
         recordDate
+      }
+      recentWorkouts {
+        id
+        review
+        rating
+      }
+      recentRecords {
+        bodyPart
+        set
       }
       error
     }
@@ -87,7 +96,7 @@ const CREATE_WORKOUT = gql`
   mutation createWorkout(
     $routineItems: [RoutineItem!]!
     $review: String!
-    $rating: String!
+    $rating: Float!
   ) {
     createWorkout(
       routineItems: $routineItems
@@ -112,7 +121,7 @@ export default () => {
   const bodyFatRate = UseInput("");
   const review = UseInput("");
   const [rating, setRating] = useState("");
-  const blankWorkoutItem = { title: "", weight: "", set: "" };
+  const blankWorkoutItem = { title: "", weight: 0, set: 0 };
   const [workoutItem, setWorkoutItem] = useState([{ ...blankWorkoutItem }]);
 
   const { loading, data, refetch } = useQuery(GET_MY_DATA);
@@ -153,16 +162,18 @@ export default () => {
       }
     } = event;
     const updatedWorkout = [...workoutItem];
-    updatedWorkout[index][className.substring(17)] = value;
+    if (className.substring(17) !== "title") {
+      updatedWorkout[index][className.substring(17)] = Number(value);
+    } else {
+      updatedWorkout[index][className.substring(17)] = value;
+    }
     setWorkoutItem(updatedWorkout);
-    console.log(workoutItem);
   };
 
   const clearWorkoutPopUp = async () => {
     setWorkoutItem([{ ...blankWorkoutItem }]);
     review.setValue("");
     setRating("");
-    await refetch();
     setAction("normal");
   };
 
@@ -208,7 +219,6 @@ export default () => {
       }
     } else if (action === "inbody") {
       try {
-        console.log(typeof date.value);
         await createInbody();
         await refetch();
         bodyWeight.setValue("");
@@ -229,10 +239,13 @@ export default () => {
     const {
       getMe: {
         user: { username, exercises },
-        latestInbodyData
+        latestInbodyData,
+        recentWorkouts,
+        recentRecords
       }
     } = data;
-    const sortedExercises = sortExercises(exercises, bodyParts);
+    const sortedExercises = sortByBodyPart(exercises, bodyParts);
+    const sortedRecords = sortByBodyPart(recentRecords, bodyParts);
     return (
       <>
         <HomePresenter
@@ -243,6 +256,8 @@ export default () => {
           deleteExercise={deleteExercise}
           types={types}
           bodyParts={bodyParts}
+          workouts={recentWorkouts}
+          records={sortedRecords}
         />
         {action !== "normal" && <Blinder />}
         {action === "exercise" && (

@@ -20,7 +20,7 @@ const DataEffect = keyframes`
 `;
 
 const Container = styled.div`
-  width: 40%;
+  width: 100%;
   background: white;
   border-radius: 10px;
   border: ${(props) => props.theme.border};
@@ -45,6 +45,7 @@ const Header = styled.div`
 const ChartContainer = styled.div`
   padding: 25px;
   width: 100%;
+  height: 330px;
 `;
 
 const Wrapper = styled.div`
