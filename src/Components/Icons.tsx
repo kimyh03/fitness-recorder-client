@@ -114,11 +114,11 @@ export const Calendar = () => (
   </svg>
 );
 
-export const LeftButton = () => (
+export const LeftButton = ({ size = "15" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="15"
-    height="15"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill="#4e73df"
   >
@@ -126,11 +126,11 @@ export const LeftButton = () => (
   </svg>
 );
 
-export const RightButton = () => (
+export const RightButton = ({ size = "15" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="15"
-    height="15"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill="#4e73df"
   >

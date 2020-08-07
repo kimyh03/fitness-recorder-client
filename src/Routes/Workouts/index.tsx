@@ -1,3 +1,3 @@
-import React from "react";
+import WorkoutContainer from "./WorkoutContainer";
 
-export default () => <span>Workouts</span>;
+export default WorkoutContainer;

@@ -55,7 +55,7 @@ export default () => {
   const review = UseInput("");
 
   const [isCompleted, setIsCompleted] = useState(false);
-  const { data: workoutData } = useQuery(GET_WORKOUT, {
+  const { data: workoutData, refetch: workoutRefetch } = useQuery(GET_WORKOUT, {
     variables: { year, month },
     onCompleted: () => setIsCompleted(true)
   });
@@ -172,7 +172,7 @@ export default () => {
               rating
             }
           });
-          await refetch();
+          await workoutRefetch();
           clearWorkoutPopUp();
           toast.success("워크아웃이 성공적으로 등록 되었습니다!");
         } catch (error) {
