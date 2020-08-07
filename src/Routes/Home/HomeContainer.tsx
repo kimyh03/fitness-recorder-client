@@ -35,21 +35,11 @@ const GET_MY_DATA = gql`
         }
       }
       latestInbodyData {
-        id
         weight
         fat
         muscle
         bodyFatRate
         recordDate
-      }
-      recentWorkouts {
-        id
-        review
-        rating
-      }
-      recentRecords {
-        bodyPart
-        set
       }
       error
     }
@@ -92,6 +82,21 @@ const CREATE_INBODY = gql`
   }
 `;
 
+const GET_WORKOUT = gql`
+  query getWorkOutDataForHome($year: Float!, $month: Float!) {
+    getWorkOutDataForHome(year: $year, month: $month) {
+      workouts {
+        review
+        rating
+      }
+      records {
+        bodyPart
+        set
+      }
+    }
+  }
+`;
+
 const CREATE_WORKOUT = gql`
   mutation createWorkout(
     $routineItems: [RoutineItem!]!
@@ -123,8 +128,31 @@ export default () => {
   const [rating, setRating] = useState("");
   const blankWorkoutItem = { title: "", weight: 0, set: 0 };
   const [workoutItem, setWorkoutItem] = useState([{ ...blankWorkoutItem }]);
-
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth());
+  const { data: workoutData } = useQuery(GET_WORKOUT, {
+    variables: { year, month },
+    onCompleted: () => setIsCompleted(true)
+  });
   const { loading, data, refetch } = useQuery(GET_MY_DATA);
+
+  const toNextMonth = () => {
+    if (month === 12) {
+      setMonth(1);
+      setYear(year + 1);
+    } else {
+      setMonth(month + 1);
+    }
+  };
+  const toLastMonth = () => {
+    if (month === 1) {
+      setMonth(12);
+      setYear(year - 1);
+    } else {
+      setMonth(month - 1);
+    }
+  };
   const [createExercise] = useMutation(CREATE_EXERCISE, {
     variables: { bodyPart: bodyPart.value, title: title.value },
     onError(error) {
@@ -239,17 +267,18 @@ export default () => {
   };
 
   if (loading) return <Loader />;
-  else if (!loading && data && data.getMe && data.getMe.user) {
+  else if (isCompleted && !loading && data && data.getMe && data.getMe.user) {
     const {
       getMe: {
         user: { username, exercises },
-        latestInbodyData,
-        recentWorkouts,
-        recentRecords
+        latestInbodyData
       }
     } = data;
+    const {
+      getWorkOutDataForHome: { records, workouts }
+    } = workoutData;
     const sortedExercises = sortByBodyPart(exercises, bodyParts);
-    const sortedRecords = sortByBodyPart(recentRecords, bodyParts);
+    const sortedRecords = sortByBodyPart(records, bodyParts);
     return (
       <>
         <HomePresenter
@@ -260,8 +289,12 @@ export default () => {
           deleteExercise={deleteExercise}
           types={types}
           bodyParts={bodyParts}
-          workouts={recentWorkouts}
+          workouts={workouts}
           records={sortedRecords}
+          toNextMonth={toNextMonth}
+          toLastMonth={toLastMonth}
+          year={year}
+          month={month}
         />
         {action !== "normal" && <Blinder />}
         {action === "exercise" && (

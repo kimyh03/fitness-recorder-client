@@ -2,6 +2,7 @@ import React from "react";
 import CreateButton from "src/Components/CreateButton";
 import ExerciseCard from "src/Components/ExerciseCard";
 import Header from "src/Components/Header";
+import { LeftButton, RightButton } from "src/Components/Icons";
 import InbodyChart from "src/Components/InbodyChart";
 import NoInbodyChart from "src/Components/NoInbodyChart";
 import NoWorkout from "src/Components/NoWorkout";
@@ -23,6 +24,13 @@ const Title = styled.div`
   margin: 0 0 20px 0;
   color: #5a5c69;
   font-size: 25px;
+  display: flex;
+  align-items: center;
+`;
+
+const PageButton = styled.button`
+  padding-top: 7px;
+  background: none;
 `;
 
 const Container = styled.div`
@@ -68,6 +76,10 @@ interface IProps {
   records: any;
   types: string[];
   bodyParts: string[];
+  toNextMonth: any;
+  toLastMonth: any;
+  year: number;
+  month: number;
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
@@ -79,7 +91,11 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   types,
   bodyParts,
   workouts,
-  records
+  records,
+  toNextMonth,
+  toLastMonth,
+  year,
+  month
 }) => {
   return (
     <>
@@ -112,7 +128,20 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
               )}
             </InbodyContainer>
             <WorkoutContainer>
-              <Title>This month Workout</Title>
+              <Title>
+                <PageButton onClick={toLastMonth}>
+                  <LeftButton />
+                </PageButton>
+                {`${year}년 ${month}월의 기록`}
+                <PageButton onClick={toNextMonth}>
+                  {year === new Date().getFullYear() &&
+                  month === new Date().getMonth() ? (
+                    <></>
+                  ) : (
+                    <RightButton />
+                  )}
+                </PageButton>
+              </Title>
               {workouts.length > 0 ? (
                 <WorkoutChart
                   bodyParts={bodyParts}
