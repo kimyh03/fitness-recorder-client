@@ -80,6 +80,7 @@ interface IProps {
   toLastMonth: any;
   year: number;
   month: number;
+  setExerciseID: any;
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
@@ -95,7 +96,8 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   toNextMonth,
   toLastMonth,
   year,
-  month
+  month,
+  setExerciseID
 }) => {
   return (
     <>
@@ -132,15 +134,15 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
                 <PageButton onClick={toLastMonth}>
                   <LeftButton />
                 </PageButton>
-                {`${year}년 ${month}월의 기록`}
-                <PageButton onClick={toNextMonth}>
-                  {year === new Date().getFullYear() &&
-                  month === new Date().getMonth() ? (
-                    <></>
-                  ) : (
+                {`${year}년 ${month + 1}월의 기록`}
+                {year >= new Date().getFullYear() &&
+                month >= new Date().getMonth() ? (
+                  <></>
+                ) : (
+                  <PageButton onClick={toNextMonth}>
                     <RightButton />
-                  )}
-                </PageButton>
+                  </PageButton>
+                )}
               </Title>
               {workouts.length > 0 ? (
                 <WorkoutChart
@@ -163,6 +165,8 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
                 deleteExercise={deleteExercise}
                 bodyPart={bodyPart}
                 exercises={exercises[index]}
+                setAction={setAction}
+                setExerciseID={setExerciseID}
               />
             ))}
           </Wrapper>

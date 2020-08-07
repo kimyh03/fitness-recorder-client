@@ -36,7 +36,7 @@ export default () => (
   <>
     <Container>
       <Header>Recent workout data</Header>
-      <NoData>아직 데이터가 없습니다.</NoData>
+      <NoData>데이터가 없습니다.</NoData>
     </Container>
   </>
 );

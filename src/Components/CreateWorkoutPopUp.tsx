@@ -6,7 +6,7 @@ const Container = styled.div`
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
-  top: 20%;
+  top: 15%;
   width: 700px;
   min-height: 300px;
   z-index: 3;

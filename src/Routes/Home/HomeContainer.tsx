@@ -1,16 +1,25 @@
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import CreateExercisePopUp from "src/Components/CreateExercisePopUp";
 import CreateInbodyPopUp from "src/Components/CreateInbodyPopUp";
 import CreateWorkoutPopUp from "src/Components/CreateWorkoutPopUp";
+import EditExercisePopUp from "src/Components/EditExercisePopUp";
 import Loader from "src/Components/Loader";
 import UseButton from "src/Hooks/UseButton";
 import UseInput from "src/Hooks/UseInput";
 import sortByBodyPart from "src/utils/sortByBodyPart";
 import styled from "styled-components";
 import HomePresenter from "./HomePresenter";
+import {
+  CREATE_EXERCISE,
+  CREATE_INBODY,
+  CREATE_WORKOUT,
+  DELETE_EXERCISE,
+  EDIT_EXERCISE,
+  GET_MY_DATA,
+  GET_WORKOUT
+} from "./HomeQueries";
 
 const Blinder = styled.div`
   position: fixed;
@@ -22,120 +31,44 @@ const Blinder = styled.div`
   z-index: 2;
 `;
 
-const GET_MY_DATA = gql`
-  query getMyData {
-    getMe {
-      user {
-        username
-        exercises {
-          id
-          bodyPart
-          title
-          latestRecord
-        }
-      }
-      latestInbodyData {
-        weight
-        fat
-        muscle
-        bodyFatRate
-        recordDate
-      }
-      error
-    }
-  }
-`;
-
-const CREATE_EXERCISE = gql`
-  mutation createExercise($bodyPart: String!, $title: String!) {
-    createExercise(bodyPart: $bodyPart, title: $title) {
-      ok
-    }
-  }
-`;
-
-const DELETE_EXERCISE = gql`
-  mutation deleteExercise($id: String!) {
-    deleteExercise(id: $id) {
-      ok
-    }
-  }
-`;
-
-const CREATE_INBODY = gql`
-  mutation createInbodyData(
-    $weight: String!
-    $fat: String!
-    $muscle: String!
-    $bodyFatRate: String!
-    $recordDate: String!
-  ) {
-    createInbodyData(
-      weight: $weight
-      fat: $fat
-      muscle: $muscle
-      bodyFatRate: $bodyFatRate
-      recordDate: $recordDate
-    ) {
-      ok
-    }
-  }
-`;
-
-const GET_WORKOUT = gql`
-  query getWorkOutDataForHome($year: Float!, $month: Float!) {
-    getWorkOutDataForHome(year: $year, month: $month) {
-      workouts {
-        review
-        rating
-      }
-      records {
-        bodyPart
-        set
-      }
-    }
-  }
-`;
-
-const CREATE_WORKOUT = gql`
-  mutation createWorkout(
-    $routineItems: [RoutineItem!]!
-    $review: String!
-    $rating: Float!
-  ) {
-    createWorkout(
-      routineItems: $routineItems
-      review: $review
-      rating: $rating
-    ) {
-      ok
-    }
-  }
-`;
-
 export default () => {
   const types = ["exercise", "workout", "inbody"];
   const bodyParts = ["chest", "back", "shoulder", "leg", "arm"];
   const [action, setAction] = useState("normal");
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth());
+
   const bodyPart = UseButton();
   const title = UseInput("");
+  const editTitle = UseInput("");
+  const [exerciseID, setExerciseID] = useState("");
+
   const date = UseInput("");
   const bodyWeight = UseInput("");
   const fat = UseInput("");
   const muscle = UseInput("");
   const bodyFatRate = UseInput("");
-  const review = UseInput("");
-  const [rating, setRating] = useState("");
+
   const blankWorkoutItem = { title: "", weight: 0, set: 0 };
   const [workoutItem, setWorkoutItem] = useState([{ ...blankWorkoutItem }]);
+  const [rating, setRating] = useState("");
+  const review = UseInput("");
+
   const [isCompleted, setIsCompleted] = useState(false);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth());
   const { data: workoutData } = useQuery(GET_WORKOUT, {
     variables: { year, month },
     onCompleted: () => setIsCompleted(true)
   });
   const { loading, data, refetch } = useQuery(GET_MY_DATA);
+  const [createExercise] = useMutation(CREATE_EXERCISE, {
+    onError(error) {
+      throw new Error(error.message.substring(15));
+    }
+  });
+  const [createWorkout] = useMutation(CREATE_WORKOUT);
+  const [createInbody] = useMutation(CREATE_INBODY);
+  const [editExerciseMutation] = useMutation(EDIT_EXERCISE);
+  const [deleteExerciseMutation] = useMutation(DELETE_EXERCISE);
 
   const toNextMonth = () => {
     if (month === 12) {
@@ -153,29 +86,6 @@ export default () => {
       setMonth(month - 1);
     }
   };
-  const [createExercise] = useMutation(CREATE_EXERCISE, {
-    variables: { bodyPart: bodyPart.value, title: title.value },
-    onError(error) {
-      throw new Error(error.message.substring(15));
-    }
-  });
-  const [createWorkout] = useMutation(CREATE_WORKOUT, {
-    variables: {
-      routineItems: workoutItem,
-      review: review.value,
-      rating
-    }
-  });
-  const [deleteExerciseMutation] = useMutation(DELETE_EXERCISE);
-  const [createInbody] = useMutation(CREATE_INBODY, {
-    variables: {
-      weight: bodyWeight.value,
-      fat: fat.value,
-      muscle: muscle.value,
-      bodyFatRate: bodyFatRate.value,
-      recordDate: date.value
-    }
-  });
 
   const addWorkoutItem = (event) => {
     event.preventDefault();
@@ -220,13 +130,15 @@ export default () => {
     }
   };
 
-  const onSubmit: React.FormEventHandler = async (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     if (action === "exercise") {
       try {
         if (bodyPart.value === "") toast.error("운동부위를 선택해주세요");
         else {
-          await createExercise();
+          await createExercise({
+            variables: { bodyPart: bodyPart.value, title: title.value }
+          });
           await refetch();
           bodyPart.setValue("");
           title.setValue("");
@@ -236,12 +148,30 @@ export default () => {
       } catch (error) {
         toast.error(error.message);
       }
+    } else if (action === "editExercise") {
+      try {
+        await editExerciseMutation({
+          variables: { id: exerciseID, title: editTitle.value }
+        });
+        toast.success("나의 종목이 성공적으로 수정 되었습니다!");
+        await refetch();
+        editTitle.setValue("");
+        setAction("normal");
+      } catch (error) {
+        toast.error(error.message);
+      }
     } else if (action === "workout") {
       if (rating === "") {
         toast.error("오늘 운동의 평점을 선택해 주세요");
       } else {
         try {
-          await createWorkout();
+          await createWorkout({
+            variables: {
+              routineItems: workoutItem,
+              review: review.value,
+              rating
+            }
+          });
           await refetch();
           clearWorkoutPopUp();
           toast.success("워크아웃이 성공적으로 등록 되었습니다!");
@@ -251,7 +181,15 @@ export default () => {
       }
     } else if (action === "inbody") {
       try {
-        await createInbody();
+        await createInbody({
+          variables: {
+            weight: bodyWeight.value,
+            fat: fat.value,
+            muscle: muscle.value,
+            bodyFatRate: bodyFatRate.value,
+            recordDate: date.value
+          }
+        });
         await refetch();
         bodyWeight.setValue("");
         date.setValue("");
@@ -295,6 +233,7 @@ export default () => {
           toLastMonth={toLastMonth}
           year={year}
           month={month}
+          setExerciseID={setExerciseID}
         />
         {action !== "normal" && <Blinder />}
         {action === "exercise" && (
@@ -304,6 +243,13 @@ export default () => {
             title={title}
             onSubmit={onSubmit}
             bodyParts={bodyParts}
+          />
+        )}
+        {action === "editExercise" && (
+          <EditExercisePopUp
+            setAction={setAction}
+            editTitle={editTitle}
+            onSubmit={onSubmit}
           />
         )}
         {action === "workout" && (
