@@ -40,7 +40,7 @@ const BodyPart = styled.button<{ isClicked: boolean }>`
   background: ${(props) => (props.isClicked ? "#4E73DF" : "white")};
   color: ${(props) => (props.isClicked ? "white" : "inherit")};
   border: ${(props) => props.theme.border};
-  border-radius: 20px;
+  border-radius: 15px;
   :hover {
     background: #4e73df;
     color: white;
@@ -61,10 +61,13 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
 `;
+
 const Input = styled.input`
   width: 250px;
-  padding: 5px 10px;
+  padding: 10px 10px;
   border: ${(props) => props.theme.border};
+  text-align: center;
+  border-radius: 7px;
   :hover {
     border: 1px solid #4e73df;
   }

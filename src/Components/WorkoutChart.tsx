@@ -110,6 +110,7 @@ const DataContainer = styled.div`
 
 const ReviewWrapper = styled.div`
   overflow: auto;
+  padding: 0 15px;
 `;
 
 const Review = styled.div`
@@ -121,6 +122,8 @@ const Review = styled.div`
   opacity: 0.7;
   font-size: 15px;
   font-weight: 700;
+  line-height: 150%;
+  text-align: center;
   :hover {
     opacity: 1;
   }

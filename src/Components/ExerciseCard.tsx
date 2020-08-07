@@ -45,7 +45,7 @@ const Data = styled.div`
 
 const Coulmn = styled.div`
   display: flex;
-  padding: 20px 0;
+  padding: 20px 15px;
   justify-content: center;
   border-bottom: ${(props) => props.theme.border};
   color: #4e73df;
@@ -77,7 +77,10 @@ const NoData = styled.div`
 `;
 
 const DeleteButton = styled.button`
+  opacity: 0.5;
+  font-weight: 700;
   color: red;
+  background: none;
 `;
 
 const ExerciseCard: React.SFC<IProps> = ({
