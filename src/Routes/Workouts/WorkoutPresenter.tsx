@@ -31,6 +31,17 @@ const Header = styled.div`
   animation: ${RiseEffect} 1s forwards 0.5s;
 `;
 
+const ButtonContainer = styled.div`
+  opacity: 0;
+  width: 15%;
+  margin-top: 20px;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: ${RiseEffect} 1s forwards 0.5s;
+`;
+
 const Date = styled.div`
   color: ${(props) => props.theme.blueBgColor};
   font-size: 30px;
@@ -40,10 +51,10 @@ const Date = styled.div`
 
 const Button = styled.div`
   padding-top: 5px;
-  opacity: 0.7;
+  opacity: 1;
+  cursor: pointer;
   :hover {
-    opacity: 1;
-    cursor: pointer;
+    opacity: 0.7;
   }
 `;
 
@@ -72,6 +83,8 @@ const Workout = styled.div`
 interface IProps {
   year: any;
   month: any;
+  currentYear: any;
+  currentMonth: any;
   toNextMonth: any;
   toLastMonth: any;
   workout: any;
@@ -80,6 +93,8 @@ interface IProps {
 const WorkoutPresenter: React.SFC<IProps> = ({
   year,
   month,
+  currentYear,
+  currentMonth,
   toNextMonth,
   toLastMonth,
   workout
@@ -92,9 +107,13 @@ const WorkoutPresenter: React.SFC<IProps> = ({
           <LeftButton size={"25"} />
         </Button>
         <Date>{`${year}년 ${month + 1}월`}</Date>
-        <Button onClick={toNextMonth}>
-          <RightButton size={"25"} />
-        </Button>
+        {year >= currentYear && month >= currentMonth ? (
+          <> </>
+        ) : (
+          <Button onClick={toNextMonth}>
+            <RightButton size={"25"} />
+          </Button>
+        )}
       </Header>
       <WorkoutContainer>
         <Workout></Workout>
@@ -113,6 +132,18 @@ const WorkoutPresenter: React.SFC<IProps> = ({
         <Workout></Workout>
         <Workout></Workout>
       </WorkoutContainer>
+      <ButtonContainer>
+        <Button onClick={toLastMonth}>
+          <LeftButton size={"25"} />
+        </Button>
+        {year >= currentYear && month >= currentMonth ? (
+          <> </>
+        ) : (
+          <Button onClick={toNextMonth}>
+            <RightButton size={"25"} />
+          </Button>
+        )}
+      </ButtonContainer>
     </Container>
   );
 };

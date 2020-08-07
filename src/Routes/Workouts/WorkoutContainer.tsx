@@ -25,7 +25,8 @@ const GET_WORKOUT_DATA = gql`
 export default () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
-
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
   const toNextMonth = () => {
     if (month === 12) {
       setMonth(1);
@@ -55,6 +56,8 @@ export default () => {
       <WorkoutPresenter
         year={year}
         month={month}
+        currentYear={currentYear}
+        currentMonth={currentMonth}
         toNextMonth={toNextMonth}
         toLastMonth={toLastMonth}
         workout={workout}
