@@ -209,13 +209,17 @@ export default () => {
         toast.error(error.message);
       }
     } else if (action === "workout") {
-      try {
-        await createWorkout();
-        await refetch();
-        clearWorkoutPopUp();
-        toast.success("워크아웃이 성공적으로 등록 되었습니다!");
-      } catch (error) {
-        toast.error(error.message);
+      if (rating === "") {
+        toast.error("오늘 운동의 평점을 선택해 주세요");
+      } else {
+        try {
+          await createWorkout();
+          await refetch();
+          clearWorkoutPopUp();
+          toast.success("워크아웃이 성공적으로 등록 되었습니다!");
+        } catch (error) {
+          toast.error(error.message);
+        }
       }
     } else if (action === "inbody") {
       try {
