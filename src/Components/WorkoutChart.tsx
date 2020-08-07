@@ -165,35 +165,24 @@ interface Iprops {
 }
 
 const WorkoutChart: React.SFC<Iprops> = ({ workouts, records, bodyParts }) => {
+  // tslint:disable-next-line: prefer-const
   let setContainer = [0, 0, 0, 0, 0];
-  records[0].map((item) => {
-    setContainer[0] = setContainer[0] + item.set;
-    return null;
-  });
-  records[1].map((item) => {
-    setContainer[1] = setContainer[1] + item.set;
-    return null;
-  });
-  records[2].map((item) => {
-    setContainer[2] = setContainer[2] + item.set;
-    return null;
-  });
-  records[3].map((item) => {
-    setContainer[3] = setContainer[3] + item.set;
-    return null;
-  });
-  records[4].map((item) => {
-    setContainer[4] = setContainer[4] + item.set;
-    return null;
-  });
-
-  const daysOfWorkout = workouts.length;
-  let container = 0;
+  let i;
+  for (i = 0; i < 5; i++) {
+    // tslint:disable-next-line: prefer-const
+    let index = i;
+    records[index].map((item) => {
+      setContainer[index] = setContainer[index] + item.set;
+      return null;
+    });
+  }
+  let ratingContainer = 0;
   workouts.map((item) => {
-    container = container + item.rating;
+    ratingContainer = ratingContainer + item.rating;
     return null;
   });
-  const averageOfRating = (container / daysOfWorkout).toFixed(2);
+  const daysOfWorkout = workouts.length;
+  const averageOfRating = (ratingContainer / daysOfWorkout).toFixed(2);
   return (
     <Container>
       <Column width={"64%"}>
