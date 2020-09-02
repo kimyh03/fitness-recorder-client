@@ -63,11 +63,11 @@ export const CREATE_INBODY = gql`
 export const GET_WORKOUT = gql`
   query getWorkOutDataForHome($year: Float!, $month: Float!) {
     getWorkOutDataForHome(year: $year, month: $month) {
-      workouts {
+      workout {
         review
         rating
       }
-      records {
+      record {
         bodyPart
         set
       }

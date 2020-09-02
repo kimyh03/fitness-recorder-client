@@ -13,7 +13,6 @@ const GET_WORKOUT_DATA = gql`
         rating
         createdAt
         records {
-          title
           weight
           set
         }
@@ -45,13 +44,14 @@ export default () => {
   };
 
   const { loading, data } = useQuery(GET_WORKOUT_DATA, {
-    variables: { year, month }
+    variables: { year, month },
   });
 
-  if (!loading && data && data.getWorkoutData && data.getWorkoutData.workout) {
+  if (!loading && data?.getWorkoutData?.workout) {
     const {
-      getWorkoutData: { workout }
+      getWorkoutData: { workout },
     } = data;
+
     return (
       <WorkoutPresenter
         year={year}
@@ -64,6 +64,7 @@ export default () => {
       />
     );
   } else {
+    console.log(data);
     return <Loader />;
   }
 };

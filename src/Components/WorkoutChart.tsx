@@ -170,8 +170,8 @@ interface Iprops {
 const WorkoutChart: React.SFC<Iprops> = ({ workouts, records, bodyParts }) => {
   // tslint:disable-next-line: prefer-const
   let setContainer = [0, 0, 0, 0, 0];
-  let i;
-  for (i = 0; i < 5; i++) {
+  // tslint:disable-next-line: prefer-const
+  for (let i = 0; i < 5; i++) {
     // tslint:disable-next-line: prefer-const
     let index = i;
     records[index].map((item) => {

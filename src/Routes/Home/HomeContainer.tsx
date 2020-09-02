@@ -18,7 +18,7 @@ import {
   DELETE_EXERCISE,
   EDIT_EXERCISE,
   GET_MY_DATA,
-  GET_WORKOUT
+  GET_WORKOUT,
 } from "./HomeQueries";
 
 const Blinder = styled.div`
@@ -57,13 +57,13 @@ export default () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const { data: workoutData, refetch: workoutRefetch } = useQuery(GET_WORKOUT, {
     variables: { year, month },
-    onCompleted: () => setIsCompleted(true)
+    onCompleted: () => setIsCompleted(true),
   });
   const { loading, data, refetch } = useQuery(GET_MY_DATA);
   const [createExercise] = useMutation(CREATE_EXERCISE, {
     onError(error) {
       throw new Error(error.message.substring(15));
-    }
+    },
   });
   const [createWorkout] = useMutation(CREATE_WORKOUT);
   const [createInbody] = useMutation(CREATE_INBODY);
@@ -96,8 +96,8 @@ export default () => {
       target: {
         value,
         className,
-        dataset: { index }
-      }
+        dataset: { index },
+      },
     } = event;
     const updatedWorkout = [...workoutItem];
     if (className.substring(17) !== "title") {
@@ -118,7 +118,7 @@ export default () => {
   const deleteExercise = async (event) => {
     if (window.confirm("종목을 삭제하면 데이터를 모두 잃습니다. 괜찮니?")) {
       const {
-        target: { value }
+        target: { value },
       } = event;
       try {
         await deleteExerciseMutation({ variables: { id: value } });
@@ -137,7 +137,7 @@ export default () => {
         if (bodyPart.value === "") toast.error("운동부위를 선택해주세요");
         else {
           await createExercise({
-            variables: { bodyPart: bodyPart.value, title: title.value }
+            variables: { bodyPart: bodyPart.value, title: title.value },
           });
           await refetch();
           bodyPart.setValue("");
@@ -151,7 +151,7 @@ export default () => {
     } else if (action === "editExercise") {
       try {
         await editExerciseMutation({
-          variables: { id: exerciseID, title: editTitle.value }
+          variables: { id: exerciseID, title: editTitle.value },
         });
         toast.success("나의 종목이 성공적으로 수정 되었습니다!");
         await refetch();
@@ -169,8 +169,8 @@ export default () => {
             variables: {
               routineItems: workoutItem,
               review: review.value,
-              rating
-            }
+              rating,
+            },
           });
           await workoutRefetch();
           clearWorkoutPopUp();
@@ -187,8 +187,8 @@ export default () => {
             fat: fat.value,
             muscle: muscle.value,
             bodyFatRate: bodyFatRate.value,
-            recordDate: date.value
-          }
+            recordDate: date.value,
+          },
         });
         await refetch();
         bodyWeight.setValue("");
@@ -209,14 +209,14 @@ export default () => {
     const {
       getMe: {
         user: { username, exercises },
-        latestInbodyData
-      }
+        latestInbodyData,
+      },
     } = data;
     const {
-      getWorkOutDataForHome: { records, workouts }
+      getWorkOutDataForHome: { record, workout },
     } = workoutData;
     const sortedExercises = sortByBodyPart(exercises, bodyParts);
-    const sortedRecords = sortByBodyPart(records, bodyParts);
+    const sortedRecords = sortByBodyPart(record, bodyParts);
     return (
       <>
         <HomePresenter
@@ -227,7 +227,7 @@ export default () => {
           deleteExercise={deleteExercise}
           types={types}
           bodyParts={bodyParts}
-          workouts={workouts}
+          workouts={workout}
           records={sortedRecords}
           toNextMonth={toNextMonth}
           toLastMonth={toLastMonth}
